@@ -1,10 +1,12 @@
 
 `1、java.lang`
 
-[Object](https://blog.csdn.net/tyrroo/article/details/83625811)
+[1)Object](https://blog.csdn.net/tyrroo/article/details/83625811)
 ```
 Object类是所有类的父类，所以Object类的对象可以接收所有类的对象，可是除了类的对象之外，Object类连数组和接口对象也都可以接收。
+```
 方法:
+```
 getClass:
 1、native方法
 2、getClass是返回一个运行时的对象
@@ -15,8 +17,10 @@ getClass:
     System.out.println(p.getClass()); Son
     System.out.println(Parent.class); Parent
 5、getClass方法的返回值类型其实是Class<? extends T>而非getClass方法声明中的Class<?>。
+```
 
 equals:
+```
 1、主要用于比较两个对象是否相等
 2、需要做对象比较时，一般需要重写equals方法，因为object的equals默认时==。
 3、==表示两个对象的地址是否相等
@@ -28,8 +32,9 @@ equals:
     传递性: x.equals(y)==true,y.equals(z)==true,x.equals(z)==true
     一致性: 多次调用 x.equals(y) 的值唯一
     x.equals(null) == false
-
+```
 hashCode:
+```
 1、native方法
 2、返回值为int类型的哈希值。
 3、Object默认是返回对象地址的hashCode值。
@@ -40,23 +45,37 @@ hashCode:
     两个对象不相等（equals），其 hashCode 有可能相同;
     hashCode 相同的两个对象，不一定相等（equals）;
     hashCode 不相同的两个对象，一定不相等（equals）;
+```
 toString:
+```
 1、默认实现为：类名+16进制无符号整型hashCode的值
 2、根据需要可以重写
 3、打印某个对象时，默认是调用 toString 方法，比如 System.out.println(person),等价于 System.out.println(person.toString())
-
+```
 finalize:
+```
 1、protected类型
 2、finalize用户垃圾回收是由JVM调用。
-
+```
 registerNatives:
+```
 1、native修饰
 2、在静态代码快中调用
 3、是对本地方法注册，装载本地库。
-
+```
+```
 notify()/notifyAll()/wait()等写到多线程的时候在做分析
 ```
-2) String 1
+
+
+[2)String](https://blog.csdn.net/SnailMann/article/details/80882719)
+```
+String是一个final类，既不能被继承的类
+String类实现了java.io.Serializable接口，可以实现序列化
+String类实现了Comparable<String>，可以用于比较大小（按顺序比较单个字符的ASCII码）
+String类实现了 CharSequence 接口，表示是一个有序字符的序列，因为String的本质是一个char类型数组
+```
+
 3) AbstractStringBuilder 1
 4) StringBuffer 1
 5) StringBuilder 1

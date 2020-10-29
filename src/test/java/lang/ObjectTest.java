@@ -1,4 +1,4 @@
-package lang.object;
+package lang;
 
 import org.junit.Test;
 
@@ -9,7 +9,7 @@ import java.util.Objects;
  * @Date: 2020/10/29 10:29 上午
  */
 
-public class Main {
+public class ObjectTest {
 
 
     @Test
