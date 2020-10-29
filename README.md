@@ -1,8 +1,61 @@
 
 `1、java.lang`
 
-[Object](https://juejin.im/post/6844903862587883527)
+[Object](https://blog.csdn.net/tyrroo/article/details/83625811)
+```
+Object类是所有类的父类，所以Object类的对象可以接收所有类的对象，可是除了类的对象之外，Object类连数组和接口对象也都可以接收。
+方法:
+getClass:
+1、native方法
+2、getClass是返回一个运行时的对象
+3、getClass方法被final修饰，不能被重写
+4、getClass与Object.class的区别，getClass是具体运行时的类的对象，class是编译时的对象
+即：class 是一个类的属性，能获取该类编译时的类对象，而 getClass() 是一个类的方法，它是获取该类运行时的类对象。
+例如：Parent p = new Son();
+    System.out.println(p.getClass()); Son
+    System.out.println(Parent.class); Parent
+5、getClass方法的返回值类型其实是Class<? extends T>而非getClass方法声明中的Class<?>。
 
+equals:
+1、主要用于比较两个对象是否相等
+2、需要做对象比较时，一般需要重写equals方法，因为object的equals默认时==。
+3、==表示两个对象的地址是否相等
+4、== 运算符用于比较基本类型的值是否相同
+5、一般重写equals，也需要重写hashCode方法
+6、equals 重写原则：
+    自反性: x.equals(x)==true
+    对称性: x.equals(y)==y.equals(x)
+    传递性: x.equals(y)==true,y.equals(z)==true,x.equals(z)==true
+    一致性: 多次调用 x.equals(y) 的值唯一
+    x.equals(null) == false
+
+hashCode:
+1、native方法
+2、返回值为int类型的哈希值。
+3、Object默认是返回对象地址的hashCode值。
+4、作用：主要是保证基于散列的集合，插入时不可重复，提高查找效率。
+5、重写Equals时一般会重写hashCode。当hash类型集合使用对象作为key时，equals的值如果相同hashCode的值应该也相同才能找到。
+7、hashCode 重写原则：
+    两个对象相等（equals），其 hashCode 一定相同;
+    两个对象不相等（equals），其 hashCode 有可能相同;
+    hashCode 相同的两个对象，不一定相等（equals）;
+    hashCode 不相同的两个对象，一定不相等（equals）;
+toString:
+1、默认实现为：类名+16进制无符号整型hashCode的值
+2、根据需要可以重写
+3、打印某个对象时，默认是调用 toString 方法，比如 System.out.println(person),等价于 System.out.println(person.toString())
+
+finalize:
+1、protected类型
+2、finalize用户垃圾回收是由JVM调用。
+
+registerNatives:
+1、native修饰
+2、在静态代码快中调用
+3、是对本地方法注册，装载本地库。
+
+notify()/notifyAll()/wait()等写到多线程的时候在做分析
+```
 2) String 1
 3) AbstractStringBuilder 1
 4) StringBuffer 1
