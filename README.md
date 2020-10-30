@@ -76,6 +76,14 @@ String类实现了java.io.Serializable接口，可以实现序列化
 String类实现了Comparable<String>，可以用于比较大小（按顺序比较单个字符的ASCII码）
 String类实现了 CharSequence 接口，表示是一个有序字符的序列，因为String的本质是一个char类型数组
 ```
+构造方法
+```
+可以构造空字符串对象,既""
+可以根据String,StringBuilder,StringBuffer构造字符串对象
+可以根据char数组，其子数组构造字符串对象
+可以根据int数组，其子数组构造字符串对象
+可以根据某个字符集编码对byte数组，其子数组解码并构造字符串对象
+```
 
 3) AbstractStringBuilder 1
 4) StringBuffer 1
