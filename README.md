@@ -87,6 +87,7 @@ String类实现了 CharSequence 接口，表示是一个有序字符的序列，
 
 [AbstractStringBuilder](https://my.oschina.net/qq785482254/blog/4278647)
 ```
+实现Appendable，可以添加字符
 抽象类，包含toString抽象方法
 动态字符数组，数组内容可变
 StringBuffer、StringBuilder的父类
@@ -97,7 +98,27 @@ StringBuffer、StringBuilder的父类
     如果MAX_ARRAY_SIZE < newCapacity < nteger.MAX_VALUE;取 newCapacity
 ```
 
-StringBuffer
+[StringBuffer](https://my.oschina.net/qq785482254/blog/4278647)
+```
+final关键字修饰的类为最终类，无法被继承 
+继承了AbstractStringBuilder类
+实现了Serializable接口，可序列化
+实现了CharSequence接口，是一个字符序列，可以进行字符序列的相关操作。
+```
+构造函数
+```
+构造函数都是调用父类构造方法
+```
+
+**方法:**
+```
+大多数方法调用的是父类方法，并加了synchronized修饰
+```
+toString：
+```
+使用toStringCache，缓存上一次字符结果，保证字符串是同一个。
+toStringCache被transient修饰所以在io中不会被序列化
+```
 5) StringBuilder 1
 6) Boolean 2
 7) Byte 2
