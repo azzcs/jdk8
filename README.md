@@ -85,8 +85,19 @@ String类实现了 CharSequence 接口，表示是一个有序字符的序列，
 可以根据某个字符集编码对byte数组，其子数组解码并构造字符串对象
 ```
 
-3) AbstractStringBuilder 1
-4) StringBuffer 1
+[AbstractStringBuilder](https://my.oschina.net/qq785482254/blog/4278647)
+```
+抽象类，包含toString抽象方法
+动态字符数组，数组内容可变
+StringBuffer、StringBuilder的父类
+扩容：
+    MAX_ARRAY_SIZE = Integer.MAX_VALUE - 8;（有些虚拟机需要保存头信息）
+    newCapacity = (value.length << 1) + 2，如果需要的长度比默认的长，则按照需要的扩容。
+    需要校验是否最大长度超过nteger.MAX_VALUE和MAX_ARRAY_SIZE
+    如果MAX_ARRAY_SIZE < newCapacity < nteger.MAX_VALUE;取 newCapacity
+```
+
+StringBuffer
 5) StringBuilder 1
 6) Boolean 2
 7) Byte 2
@@ -225,3 +236,8 @@ String类实现了 CharSequence 接口，表示是一个有序字符的序列，
 3) URI 4
 4) URL 4
 5) URLEncoder 4
+
+其他参考：
+
+[Java transient关键字使用小记](https://www.cnblogs.com/lanxuezaipiao/p/3369962.html)
+[JDK1.8源码 由浅入深！抽丝剥茧！重要类的归纳总结！](https://my.oschina.net/qq785482254/blog/4271683)
