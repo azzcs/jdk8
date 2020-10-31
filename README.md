@@ -391,5 +391,7 @@ Integer.toString((int)value)
 其他参考：
 
 [Java transient关键字使用小记](https://www.cnblogs.com/lanxuezaipiao/p/3369962.html)
+
 [JDK1.8源码 由浅入深！抽丝剥茧！重要类的归纳总结！](https://my.oschina.net/qq785482254/blog/4271683)
+
 [原码, 反码, 补码 详解](https://www.cnblogs.com/zhangziqiu/archive/2011/03/30/computercode.html)
