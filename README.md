@@ -136,8 +136,54 @@ toStringCache被transient修饰所以在io中不会被序列化
 ```
 
 [Boolean](https://juejin.im/post/6844903921262002190)
-
-
+```
+Java的Boolean对象是对boolean基本数据类型的封装
+有着一个字段存放对应的boolean数据值，提供了许多方法方便对boolean进行操作。
+实现Serializable接口，可以序列化。
+实现Comparable接口，可以做比较。
+```
+属性值：
+```
+TRUE、FALSE
+TYPE（bool的类类型）Boolean.TYPE == boolean.class
+```
+构造函数
+```
+Boolean(String s)
+Boolean(boolean value)
+```
+方法：
+parseBoolean(String s):
+```
+((s != null) && s.equalsIgnoreCase("true"));
+只要不是true都为false
+```
+hashCode():
+```
+value ? 1231 : 1237;
+固定都hash值
+```
+getBoolean(String name):
+```
+获取System.getProperty()中都属性
+```
+compare(boolean x, boolean y):
+```
+(x == y) ? 0 : (x ? 1 : -1);
+true > false
+```
+logicalAnd(boolean a, boolean b) :
+```
+a && b
+```
+logicalOr(boolean a, boolean b) :
+```
+a || b
+```
+logicalXor(boolean a, boolean b) :
+```
+a ^ b
+```
 
 7) Byte 2
 8) Double 2
