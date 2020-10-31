@@ -5,7 +5,7 @@
 ```
 Object类是所有类的父类，所以Object类的对象可以接收所有类的对象，可是除了类的对象之外，Object类连数组和接口对象也都可以接收。
 ```
-**方法:**
+###### 方法:
 
 getClass:
 ```
@@ -110,7 +110,7 @@ final关键字修饰的类为最终类，无法被继承
 构造函数都是调用父类构造方法
 ```
 
-**方法:**
+###### 方法:
 ```
 大多数方法调用的是父类方法，并加了synchronized修饰，所以是线程安全的
 ```
@@ -125,7 +125,7 @@ toStringCache被transient修饰所以在io中不会被序列化
 构造函数都是调用父类构造方法
 ```
 
-**方法:**
+###### 方法:
 ```
 大多数方法调用的是父类方法，与StringBuffer相比较没有用synchronized修饰，所以是线程不安全的，同时效率优于StringBuffer
 ```
@@ -152,7 +152,8 @@ TYPE（bool的类类型）Boolean.TYPE == boolean.class
 Boolean(String s)
 Boolean(boolean value)
 ```
-方法：
+###### 方法：
+
 parseBoolean(String s):
 ```
 ((s != null) && s.equalsIgnoreCase("true"));
