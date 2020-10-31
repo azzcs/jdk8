@@ -112,15 +112,33 @@ final关键字修饰的类为最终类，无法被继承
 
 **方法:**
 ```
-大多数方法调用的是父类方法，并加了synchronized修饰
+大多数方法调用的是父类方法，并加了synchronized修饰，所以是线程安全的
 ```
 toString：
 ```
-使用toStringCache，缓存上一次字符结果，保证字符串是同一个。
+使用toStringCache，缓存上一次字符结果，保证字符串是同一个。（jdk8自测没有用到缓存）
 toStringCache被transient修饰所以在io中不会被序列化
 ```
-5) StringBuilder 1
-6) Boolean 2
+
+[StringBuilder](https://blog.csdn.net/qq_34942272/article/details/106344378)
+```
+构造函数都是调用父类构造方法
+```
+
+**方法:**
+```
+大多数方法调用的是父类方法，与StringBuffer相比较没有用synchronized修饰，所以是线程不安全的，同时效率优于StringBuffer
+```
+toString：
+```
+没有使用缓存，每次都会创建新都对象。
+toStringCache被transient修饰所以在io中不会被序列化
+```
+
+[Boolean](https://juejin.im/post/6844903921262002190)
+
+
+
 7) Byte 2
 8) Double 2
 9) Float 2
