@@ -1,7 +1,7 @@
 
-`1、java.lang`
+`一、 java.lang`
 
-[1)Object](https://blog.csdn.net/tyrroo/article/details/83625811)
+[1、Object](https://blog.csdn.net/tyrroo/article/details/83625811)
 ```
 Object类是所有类的父类，所以Object类的对象可以接收所有类的对象，可是除了类的对象之外，Object类连数组和接口对象也都可以接收。
 ```
@@ -69,7 +69,7 @@ notify()/notifyAll()/wait()等写到多线程的时候在做分析
 ```
 
 
-[2)String](https://blog.csdn.net/SnailMann/article/details/80882719)
+[2、String](https://blog.csdn.net/SnailMann/article/details/80882719)
 ```
 String是一个final类，既不能被继承的类
 String类实现了java.io.Serializable接口，可以实现序列化
@@ -85,7 +85,7 @@ String类实现了 CharSequence 接口，表示是一个有序字符的序列，
 可以根据某个字符集编码对byte数组，其子数组解码并构造字符串对象
 ```
 
-[AbstractStringBuilder](https://my.oschina.net/qq785482254/blog/4278647)
+[3、AbstractStringBuilder](https://my.oschina.net/qq785482254/blog/4278647)
 ```
 实现Appendable，可以添加字符
 抽象类，包含toString抽象方法
@@ -98,7 +98,7 @@ StringBuffer、StringBuilder的父类
     如果MAX_ARRAY_SIZE < newCapacity < nteger.MAX_VALUE;取 newCapacity
 ```
 
-[StringBuffer](https://my.oschina.net/qq785482254/blog/4278647)
+[4、StringBuffer](https://my.oschina.net/qq785482254/blog/4278647)
 ```
 final关键字修饰的类为最终类，无法被继承 
 继承了AbstractStringBuilder类
@@ -120,7 +120,7 @@ toString：
 toStringCache被transient修饰所以在io中不会被序列化
 ```
 
-[StringBuilder](https://blog.csdn.net/qq_34942272/article/details/106344378)
+[5、StringBuilder](https://blog.csdn.net/qq_34942272/article/details/106344378)
 ```
 构造函数都是调用父类构造方法
 ```
@@ -135,17 +135,16 @@ toString：
 toStringCache被transient修饰所以在io中不会被序列化
 ```
 
-[Boolean](https://juejin.im/post/6844903921262002190)
+[6、Boolean](https://juejin.im/post/6844903921262002190)
 ```
-Java的Boolean对象是对boolean基本数据类型的封装
-有着一个字段存放对应的boolean数据值，提供了许多方法方便对boolean进行操作。
+Boolean是对boolean基本数据类型的封装
 实现Serializable接口，可以序列化。
 实现Comparable接口，可以做比较。
 ```
 属性值：
 ```
 TRUE、FALSE
-TYPE（bool的类类型）Boolean.TYPE == boolean.class
+TYPE（bool的类类型）Boolean.TYPE == boolean.class !=Boolean.class
 ```
 构造函数
 ```
@@ -186,7 +185,73 @@ logicalXor(boolean a, boolean b) :
 a ^ b
 ```
 
-7) Byte 2
+[7、Byte](https://juejin.im/post/6844903924869103624)
+
+```
+Byte是对byte基本数据类型的封装
+Byte类大量使用了Integer的方法
+继承Number（抽象对象），所以Byte是数字。
+Number实现Serializable接口
+Number包含intValue、longValue、floatValue、doubleValue、byteValue、shortValue方法
+实现Serializable接口，可以序列化。
+实现Comparable接口，可以做比较。
+```
+
+属性值
+```
+MIN_VALUE = -128;MAX_VALUE = 127; (计算机以补码形式存储)
+Byte.TYPE == byte.class != Byte.class
+SIZE = 8; （定义了byte值的二进制补码格式的bit位数，固定8位。）
+BYTES = SIZE / Byte. （SIZE;定义了byte值的二进制补码格式的字节数，计算值固定为1。）
+byte value;（Byte因为是byte的包装类，所以这里包含了对应的byte基本类型数据的变量）
+```
+静态内部类
+
+ByteCache
+
+``` 
+ByteCache Byte cache[] 中缓存-128 -- 127 Byte对象
+```
+
+###### 方法：
+
+parseByte(String s, int radix):
+```
+传入字符串和进制数
+```
+
+valueOf(byte b):
+```
+直接从ByteCache缓存中取
+
+```
+decode(String nm):
+```
+针对字符串解码，将字符串转换成Byte类型值。
+主要逻辑是调用了Integer.decode方法获取解码后的数字,然后校验是否超出Byte的范围。
+
+```
+toUnsignedInt(byte x) :
+```
+转换为无符号的Int值
+
+```
+toUnsignedLong(byte x):
+```
+转换为无符号的Long值
+
+```
+equals(Object obj):
+```
+对比的是当前的值
+
+```
+toString():
+```
+Integer.toString((int)value)
+调用的Integer的toString
+
+```
 8) Double 2
 9) Float 2
 10) Integer 2
@@ -327,3 +392,4 @@ a ^ b
 
 [Java transient关键字使用小记](https://www.cnblogs.com/lanxuezaipiao/p/3369962.html)
 [JDK1.8源码 由浅入深！抽丝剥茧！重要类的归纳总结！](https://my.oschina.net/qq785482254/blog/4271683)
+[原码, 反码, 补码 详解](https://www.cnblogs.com/zhangziqiu/archive/2011/03/30/computercode.html)
