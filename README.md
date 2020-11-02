@@ -252,8 +252,121 @@ Integer.toString((int)value)
 调用的Integer的toString
 
 ```
-8) Double 2
-9) Float 2
+
+[8、Double](https://juejin.im/post/6844903928715296782)
+
+```
+继承Number类
+实现Comparable接口
+Double是double基础数据类型的包装类
+double为64位双精度浮点数，使用科学计数法计数
+double计数方式：
+    符号位 指数  尾数  长度  
+    1     8    23    32
+符号位：0/1 正/负
+数字 = 符号位*指数*尾数
+```
+
+属性：
+```
+double value;   当前double值
+POSITIVE_INFINITY = 1.0 / 0.0;  POSITIVE_INFINITY 表示正无穷，值为0x7ff0000000000000L；标准定义指数域全为1，尾数域全为0
+NEGATIVE_INFINITY = -1.0 / 0.0; NEGATIVE_INFINITY 表示负无穷，值为0xfff0000000000000L；标准定义指数域全为1，尾数域全为0
+NaN = 0.0d / 0.0; NaN 英文缩写，Not-a-Number，标准定义为 指数域全为1，尾数域不全为0
+MAX_VALUE = 0x1.fffffffffffffP+1023; 最大规约数
+MIN_NORMAL = 0x1.0p-1022;            最小的规约数
+MIN_VALUE = 0x0.0000000000001P-1022; 最小非规约数
+MAX_EXPONENT =  1023;   最大的指数
+MIN_EXPONENT = -1022;   最小的指数
+SIZE = 64;  位数
+BYTES = SIZE / Byte.SIZE;   字节数
+TYPE = double.class != Double.class
+```
+
+构造方法：
+```
+Double(double value)
+Double(String s) throws NumberFormatException
+```
+
+方法：
+toString()
+```
+调用FloatingDecimal.toJavaFormatString()方法
+10^-3 ~ 10^7之间，会返回正常的十进制数，而不在这个范围时，会采用科学计数法表示。
+```
+toHexString(double d)
+```
+返回对应的十六进制字符串。
+```
+valueOf(String s) throws NumberFormatException 
+valueOf(double d)
+```
+当参数为double类型时，直接new Double(d) 然后返回；
+对于字符串参数，调用parseDouble转换成double数据值，然后new一个新对象返回。
+```
+isNaN(double v)
+isNaN()
+```
+return (v != v);
+判断是不是一个数
+```
+isInfinite(double v)
+isInfinite()
+```
+判断是不是无穷数，包含正无穷和负无穷
+```
+isFinite(double d)
+```
+通过输入参数绝对值是否小于double类型的最大值，判断是不是有限数
+```
+byteValue()
+intValue()
+longValue()
+floatValue()
+doubleValue()
+```
+返回对应的类型值，强制类型转换。
+```
+hashCode(double value)
+```
+高32位与低32位异或计算返回int整数值作为hashCode
+```
+equals(Object obj)
+```
+首先判断是不是Double对象实例，然后通过doubleToLongBits获取两个对应的长整型数，判断两者是否一致；值得注意的是一些特殊值的判断逻辑。
+```
+doubleToLongBits(double value)
+doubleToRawLongBits(double value)
+longBitsToDouble(long bits)
+```
+返回表示浮点数的位
+```
+compareTo(Double anotherDouble)
+compare(double d1, double d2)
+```
+比较大小
+```
+sum(double a, double b)
+```
+求和
+```
+max(double a, double b)
+```
+返回其中一个较大的
+```
+min(double a, double b)
+```
+返回其中一个较小的
+```
+
+
+[9、Float](https://blog.renyijiu.com/post/java%E6%BA%90%E7%A0%81float/)
+
+```
+Float是float数据类型的包装类
+```
+
 10) Integer 2
 11) Long 2
 12) Short 2
@@ -395,3 +508,7 @@ Integer.toString((int)value)
 [JDK1.8源码 由浅入深！抽丝剥茧！重要类的归纳总结！](https://my.oschina.net/qq785482254/blog/4271683)
 
 [原码, 反码, 补码 详解](https://www.cnblogs.com/zhangziqiu/archive/2011/03/30/computercode.html)
+
+[Java语言中：float、double在内存中存储方式](https://www.jianshu.com/p/be3e15352485)
+
+[有趣的NaN类型](https://www.cnblogs.com/big-xuyue/p/4106130.html)
