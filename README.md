@@ -123,6 +123,7 @@ toStringCache被transient修饰所以在io中不会被序列化
 [5、StringBuilder](https://blog.csdn.net/qq_34942272/article/details/106344378)
 ```
 构造函数都是调用父类构造方法
+final标识，表示是不可继承的
 ```
 
 ###### 方法:
@@ -140,6 +141,7 @@ toStringCache被transient修饰所以在io中不会被序列化
 Boolean是对boolean基本数据类型的封装
 实现Serializable接口，可以序列化。
 实现Comparable接口，可以做比较。
+final标识，表示是不可继承的
 ```
 属性值：
 ```
@@ -190,6 +192,7 @@ a ^ b
 ```
 Byte是对byte基本数据类型的封装
 Byte类大量使用了Integer的方法
+final标识，表示是不可继承的
 继承Number（抽象对象），所以Byte是数字。
 Number实现Serializable接口
 Number包含intValue、longValue、floatValue、doubleValue、byteValue、shortValue方法
@@ -258,6 +261,7 @@ Integer.toString((int)value)
 ```
 继承Number类
 实现Comparable接口
+final标识，表示是不可继承的
 Double是double基础数据类型的包装类
 double为64位双精度浮点数，使用科学计数法计数
 double计数方式：
@@ -365,9 +369,88 @@ min(double a, double b)
 
 ```
 Float是float数据类型的包装类
+继承Number类
+实现Comparable接口
+final标识，表示是不可继承的
+Float和Double都是浮点数，区别在于Float为32位，Double为64位
 ```
 
-10) Integer 2
+[10、Integer](https://juejin.im/post/6844903741041147912)
+```
+Integer是int的包装类，int是java的一种基本数据类型
+Integer变量必须实例化后才能使用，而int变量不需要
+非new生成的Integer变量指向的是java常量池中的对象，而new Integer()生成的变量指向堆中新建的对象，两者在内存中的地址不同）
+Integer的默认值是null，int的默认值是0
+```
+属性：
+```
+MIN_VALUE = 0x80000000; - 2的31次方
+MAX_VALUE = 0x7fffffff;   2的31次方减1
+TYPE    integer.class = Integer.Type != Integer.class
+digits  存储二进制到36进制所需要的所有字符
+sizeTable 存储了对应位数的最大值
+DigitTens   是为了获取0到99之间某个数的十位
+DigitOnes   是为了获取0到99之间某个数的个位
+value   Integer对象中真正保存int值的
+```
+构造函数：
+Integer(int value)
+Integer(String s)
+```
+Integer i = new Integer(10);
+        i = 5;
+本质是：
+Integer i = new Integer(10);
+        i = Integer.valueOf(5);
+```
+
+内部类：
+```
+此类为静态内部类
+用于加载Integer类是缓存 -128 到 127 之间到Integer对象
+```
+
+方法：
+valueOf(int i)
+valueOf(String s)
+valueOf(String s, int radix)
+```
+可以设置进制
+如果在-128 到 127 之间，直接从缓存中获取
+如果不是则new
+建议使用valueOf方法来代替构造函数。或者直接使用Integer i = 100;编译器会转成Integer s = Integer.valueOf(100);
+```
+
+从System.property 中获取Integer值
+```
+Integer getInteger(String nm)
+第二个参数是默认值
+Integer getInteger(String nm, int val)
+Integer getInteger(String nm, Integer val)
+Integer decode(String nm)
+Integer valueOf(String s)
+Integer valueOf(String s, int radix)
+int parseUnsignedInt(String s)
+int parseUnsignedInt(String s, int radix)
+int parseInt(String s)
+int parseInt(String s, int radix)
+```
+decode(String nm)
+```
+将 String 解码为 Integer。接受十进制、十六进制和八进制数字。
+根据要解码的 String（mn)的形式转成不同进制的数字。
+ mn由三部分组成：符号、基数说明符和字符序列。
+ —0X123中-是符号位，0X是基数说明符（0表示八进制，0x,0X，#表示十六进制，什么都不写则表示十进制），123是数字字符序列。
+```
+hashCode(int value)
+```
+直接返回值
+```
+equals(Object obj)
+```
+直接比较值大小
+```
+
 11) Long 2
 12) Short 2
 13) Thread 2

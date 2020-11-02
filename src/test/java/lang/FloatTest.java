@@ -9,7 +9,7 @@ import org.junit.Test;
 public class FloatTest {
     @Test
     public void typeTest() {
-        Integer decode = Integer.parseInt("10000000",2);
+        Float decode = 1F;
         System.out.println(decode);
     }
 
