@@ -19,4 +19,10 @@ public class IntegerTest {
         i = 5;
     }
 
+    @Test
+    public void reverseTest() {
+        Integer i = new Integer(10);
+        System.out.println(Integer.reverse(i));
+    }
+
 }

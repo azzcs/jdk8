@@ -389,8 +389,8 @@ MAX_VALUE = 0x7fffffff;   2的31次方减1
 TYPE    integer.class = Integer.Type != Integer.class
 digits  存储二进制到36进制所需要的所有字符
 sizeTable 存储了对应位数的最大值
-DigitTens   是为了获取0到99之间某个数的十位
-DigitOnes   是为了获取0到99之间某个数的个位
+DigitTens   是为了获取0到99之间某个数的十位。直接通过数组就可以获取到该数到十位到值，不需要计算
+DigitOnes   是为了获取0到99之间某个数的个位。直接通过数组就可以获取到该数到个位到值，不需要计算
 value   Integer对象中真正保存int值的
 ```
 构造函数：
@@ -451,9 +451,96 @@ equals(Object obj)
 直接比较值大小
 ```
 
-11) Long 2
-12) Short 2
-13) Thread 2
+[11、Long](https://juejin.im/post/6844903956334772237)
+```
+与Integer相似，区别在于Integer为32，位Long为64位。
+```
+[12、Short](https://juejin.im/post/6844903939599499277)
+```
+与Integer相似，区别在于Integer为32，位Short为16位。
+```
+[13、Thread](https://blog.csdn.net/qq_34942272/article/details/106373608)
+
+``` 
+实现了Runnable接口,默认run方法调用target.run();其中target为传入的Runnable对象
+一个“线程”是在在程序中执行的线程。Java虚拟机允许应用多个线程并发运行。
+每个线程都有优先级，优先级高的先执行。线程可能是守护线程或者不是。
+线程的优先级等于创建线程的优先级
+通常JVM启动，有一个非守护线程作为主线程。只有当Runtime.exit被调用或者所有非守护线程死亡时（run执行完毕并返回/抛出异常）JVM会停止运行这些线程
+两种创建线程的方法：继承Thread类/实现Runnable接口
+每个线程有自己的名称用来标识自己。但可能多个线程会重名，如果启动时没有创建名字，会自动生成一个。
+
+```
+
+关键属性：
+``` 
+name        是表示Thread的名字，可以通过Thread类的构造器中的参数来指定线程名字，
+priority    表示线程的优先级（最大值为10，最小值为1，默认值为5），
+daemon      表示线程是否是守护线程，如果在main线程中创建了一个守护线程，当main方法运行完毕之后，守护线程也会随着消亡。在JVM中，垃圾收集器线程就是守护线程。
+target      表示要执行的任务。
+group       线程群组
+```
+
+主要方法：
+start()
+``` 
+start()用来启动一个线程，当调用start方法后，系统才会开启一个新的线程来执行用户定义的子任务，在这个过程中，会为相应的线程分配需要的资源。
+```
+run() 
+``` 
+run()方法是不需要用户来调用的，当通过start方法启动一个线程之后，当线程获得了CPU执行时间，便进入run方法体去执行具体的任务。
+注意，继承Thread类必须重写run方法，在run方法中定义具体要执行的任务。默认run方法调用target.run();其中target为传入的Runnable对象
+
+```
+sleep(long millis) 
+sleep(long millis, int nanos) 
+``` 
+sleep方法是静态方法，会使当前线程睡眠：（例如：Thread t1 = new Thread(); t1.sleep(5000); 表示的是当前线程睡5秒，并不是t1线程。）
+sleep让线程睡眠，交出CPU，让CPU去执行其他的任务。
+sleep方法不会释放锁，也就是说如果当前线程持有对某个对象的锁，则即使调用sleep方法，其他线程也无法访问这个对象。
+sleep方法相当于让线程进入阻塞状态。
+
+```
+yield()
+``` 
+调用yield方法会让当前线程交出CPU权限，让CPU去执行其他的线程。
+它跟sleep方法类似，同样不会释放锁。
+但是yield不能控制具体的交出CPU的时间，另外，yield方法只能让拥有相同优先级的线程有获取CPU执行时间的机会。
+它的实际运行流程是先检测当前是否有相同优先级的线程处于同可运行状态，如果有则把CPU的占有权交给此线程，否则继续运行原来的线程。
+注意，调用yield方法并不会让线程进入阻塞状态，而是让线程重回就绪状态，它只需要等待重新获取CPU执行时间，这一点是和sleep方法不一样的。
+```
+join()
+join(long millis)
+join(long millis, int nanos)
+``` 
+join()方法的作用就是将调用join的线程优先执行。
+主线程等待自线程执行完成后再执行。
+```
+interrupt()
+``` 
+中断线程
+```
+interrupted()
+``` 
+返回中断状态并且清除中断状态
+```
+isInterrupted()
+``` 
+返回中断状态，但不会清除中断状态
+```
+wait()
+``` 
+使调用wait()方法的线程释放共享资源锁，然后从运行状态退出，进入等待队列，直到被再次唤醒 或 定时等待 N 毫秒，如果没有通知就超时返回。
+wait()方法属于Object的方法， 使用时首先需要获得锁，一般放在同步方法或同步代码块中，由synchronized关键字修饰，需要重新唤醒时由notify()方法和notifyAll()方法来唤醒。
+```
+notify()
+notifyAll()
+``` 
+这两个方法不属于Thread类中的方法，而是Object类中的方法.
+但是这两个方法只有在线程中才有使用场景，作用在于唤醒正在等待状态的线程。
+notify()方法随机唤醒等待队列中等待同一共享资源的线程，此线程回退出等待队列，进入可运行状态。
+notifyAll()方法则是唤醒所有正在等待队列中等待同一共享资源的全部线程，全部退出等待队列，进入可运行状态
+```
 14) ThreadLocal 2
 15) Enum 3
 16) Throwable 3
