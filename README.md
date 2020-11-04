@@ -482,6 +482,7 @@ group       线程群组
 ```
 
 主要方法：
+
 start()
 ``` 
 start()用来启动一个线程，当调用start方法后，系统才会开启一个新的线程来执行用户定义的子任务，在这个过程中，会为相应的线程分配需要的资源。
@@ -598,7 +599,77 @@ ThreadLocalMap.remove(this):
     然后通过下标获取Entry对象，并比较该Entry对象到引用对象是否与当前的ThreadLocal是否相等
     如果相等则清除，如果不想等向后寻找直到直到找到相等到值后清除
 ```
-15) Enum 3
+[15、Enum](https://blog.csdn.net/qiuchengjia/article/details/52910948)
+
+``` 
+Enum类是java.lang包中一个类，他是Java语言中所有枚举类型的公共基类
+抽象类不能被实例化
+Enum类无法被继承
+实现Comparable和Serializable接口
+
+```
+enum Color {RED, BLUE, GREEN}
+反编译后：
+``` 
+public final class Color extends Enum<Color> {
+  public static final Color[] values() { return (Color[])$VALUES.clone(); }
+  public static Color valueOf(String name) { ... }
+
+  private Color(String s, int i) { super(s, i); }
+
+  public static final Color RED;
+  public static final Color BLUE;
+  public static final Color GREEN;
+
+  private static final Color $VALUES[];
+
+  static {
+    RED = new Color("RED", 0);
+    BLUE = new Color("BLUE", 1);
+    GREEN = new Color("GREEN", 2);
+    $VALUES = (new Color[] { RED, BLUE, GREEN });
+  }
+} 
+```
+``` 
+反编译后：
+    final修饰
+    extends Enum<Color>
+    static {},静态代码块
+    由于枚举类型的对象是static，并且在static块中初始化，所以由JVM的ClassLoader机制保证了线程安全性。
+```
+
+成员变量：
+``` 
+enum Color {RED, BLUE, GREEN}
+name    RED、BLUE、GREEN
+ordinal 0、  1、   2
+```
+
+构造函数：
+``` 
+Enum(String name, int ordinal) 
+protected修饰，保护类型
+子类构造函数中调用，传入name值和ordinal
+```
+方法：
+
+toString()：
+``` 
+返回name值
+```
+
+compareTo(E o)：
+``` 
+1、判断E是否是当前枚举类型的类
+2、如果是比较ordinal值
+```
+
+valueOf(Class<T> enumType,String name)：
+``` 
+通过名称返回该枚举类型的对应值
+子类增加valueOf(String name)方法，调用的是这个方法
+```
 16) Throwable 3
 17) Error 3
 18) Exception 3
