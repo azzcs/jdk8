@@ -670,11 +670,45 @@ valueOf(Class<T> enumType,String name)：
 通过名称返回该枚举类型的对应值
 子类增加valueOf(String name)方法，调用的是这个方法
 ```
-16) Throwable 3
-17) Error 3
-18) Exception 3
-19) Class 4
-20) ClassLoader 4
+[16、Throwable](https://juejin.im/post/6844904115185647629)
+``` 
+只有Throwable类的实例才能被Java虚拟机或者Java的throw语句抛出
+只有Throwable类或者该类的子类才能成为catch语句的参数
+一个throwable可以阻止其他throwable冒泡
+实现了 Serializable 接口
+```
+[17、Error、18Exception](https://www.jianshu.com/p/9685e5f23ca1)
+``` 
+Error、Exception都继承了Throwable类
+Error 最重要的意义，在于 JVM 对它的约定。Error表示非常重要的错误，在编译期是无法检查出来的，程序不应该抛出Error。
+```
+[19、Class](https://blog.csdn.net/pange1991/article/details/81303454)
+
+[20、ClassLoader](https://juejin.im/entry/6844903558618284045)
+
+类加载过程：
+``` 
+调用loadClass(String name, boolean resolve)方法加载类：
+1、getClassLoadingLock(name)，获取锁
+    判断parallelLockMap是否为null，如果为null表示不是并行加载则直接返回当前对象作为锁
+    如果不为null，表示是并行加载，则从parallelLockMap中用className获取对象作为锁。
+    如果parallelLockMap中用className获取不到则新建一个对象作为锁并放入parallelLockMap中
+2、synchronized，同步加载
+3、findLoadedClass(name),检验该类是否被加载过，如果加载过就直接返回。
+4、如果没有加载过，判断parent，父类加载器是否为null，如果不为null委托给父类加载。
+    c = parent.loadClass(name, false);
+    并且resolve参数为false，所以不使用父类的resolveClass(Class<?> c)方法
+5、如果父类加载器parent为null，则调用findBootstrapClassOrNull(name)返回虚拟机的类加载器
+6、如果还没有加载成功则调用该类的findClass(name)方法加载。
+7、如果还没有加载到，则报错
+```
+
+[双亲委托](https://zhuanlan.zhihu.com/p/142141937)
+```  
+为什么要使用双亲委托：
+    如果不使用双亲委托，那么就可以写一个恶意的基础类，如java.lang.String类自己实现类加载器不使用并加载，将会使所有使用到该类到地方使用这个类。
+    如果使用双亲委托，则会先从父类加载，java.lang.String永远是由根装载器来装载。
+```
 21) Compiler 4
 22) System 4
 23) Package 4
