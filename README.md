@@ -530,6 +530,7 @@ isInterrupted()
 ```
 wait()
 ``` 
+需要同一锁，与notify()、notifyAll()共同使用。
 使调用wait()方法的线程释放共享资源锁，然后从运行状态退出，进入等待队列，直到被再次唤醒 或 定时等待 N 毫秒，如果没有通知就超时返回。
 wait()方法属于Object的方法， 使用时首先需要获得锁，一般放在同步方法或同步代码块中，由synchronized关键字修饰，需要重新唤醒时由notify()方法和notifyAll()方法来唤醒。
 ```
@@ -541,7 +542,62 @@ notifyAll()
 notify()方法随机唤醒等待队列中等待同一共享资源的线程，此线程回退出等待队列，进入可运行状态。
 notifyAll()方法则是唤醒所有正在等待队列中等待同一共享资源的全部线程，全部退出等待队列，进入可运行状态
 ```
-14) ThreadLocal 2
+[14) ThreadLocal](https://www.cnblogs.com/dennyzhangdd/p/7978455.html)
+
+``` 
+这个类提供线程局部变量，每个线程之间的数据进行隔离。
+这些变量与正常的变量不同，每个线程访问一个(通过它的get或set方法)都有它自己的、独立初始化的变量副本。
+ThreadLocal实例通常是类中的私有静态字段，希望将状态与线程关联(例如，用户ID或事务ID)。
+```
+
+原理：
+``` 
+Thread对象中有ThreadLocal.ThreadLocalMap threadLocals = null 属性;
+get、set、remove等方法本质操作的都是这个ThreadLocalMap
+ThreadLocalMap：包含Entry[] table的一个数组，数据就存放在这个数组中。
+Entry：包含一个 Object value;并且继承WeakReference，所以是一个弱引用的对象。
+Entry通过构造方法传入ThreadLocal作为引用。
+```
+
+initialValue()
+``` 
+获取不到值时，使用该方法返回的值，get()方法中会使用。
+```
+
+set()
+``` 
+1、通过当前线程对象获取到该线程的ThreadLocalMap对象
+2、如果ThreadLocalMap为null，则初始化并设置值。初始化的时候会初始化：Entry[] table
+3、如果不为null，调用ThreadLocalMap的set方法
+ThreadLocalMap.set:
+    通过当前线程的threadLocalHashCode计算出table中的下标i。
+    然后用该下标获取获取到Entry对象，并比较该Entry对象到引用对象是否与当前的ThreadLocal是否相等
+    如果相等或者为null，则将Entry中的vlaue替换为当前要set的值
+    如果不想等则下标自增，向后寻找直到返回的Entry为null。
+    如果直到Entry为null也没有找到则将null替换为要set的值，并判断是否需要rehash
+```
+
+get()
+``` 
+1、通过当前线程对象获取到该线程的ThreadLocalMap对象
+2、如果ThreadLocalMap为null，则初始化并设置值。初始化的时候会初始化：Entry[] table
+3、如果不为null，调用ThreadLocalMap的getEntry方法
+ThreadLocalMap.getEntry:
+    通过当前线程的threadLocalHashCode计算出table中的下标i
+    然后通过下标获取Entry对象，并比较该Entry对象到引用对象是否与当前的ThreadLocal是否相等
+    如果相等则返回，如果不想等向后寻找直到直到找到相等到值或者null
+    如果找到null，则返回initialValue()返回到值，并生成Entry对象添加到ThreadLocalMap中
+    
+```
+remove()
+``` 
+1、通过当前线程对象获取到该线程的ThreadLocalMap对象
+2、调用ThreadLocalMap.remove(this)
+ThreadLocalMap.remove(this):
+    通过当前线程的threadLocalHashCode计算出table中的下标i
+    然后通过下标获取Entry对象，并比较该Entry对象到引用对象是否与当前的ThreadLocal是否相等
+    如果相等则清除，如果不想等向后寻找直到直到找到相等到值后清除
+```
 15) Enum 3
 16) Throwable 3
 17) Error 3
@@ -682,3 +738,5 @@ notifyAll()方法则是唤醒所有正在等待队列中等待同一共享资源
 [Java语言中：float、double在内存中存储方式](https://www.jianshu.com/p/be3e15352485)
 
 [有趣的NaN类型](https://www.cnblogs.com/big-xuyue/p/4106130.html)
+
+[关于Java中的WeakReference](https://www.jianshu.com/p/964fbc30151a)
