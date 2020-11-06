@@ -695,7 +695,7 @@ Error 最重要的意义，在于 JVM 对它的约定。Error表示非常重要�
     如果parallelLockMap中用className获取不到则新建一个对象作为锁并放入parallelLockMap中
 2、synchronized，同步加载
 3、findLoadedClass(name),检验该类是否被加载过，如果加载过就直接返回。
-4、如果没有加载过，判断parent，父类加载器是否为null，如果不为null委托给父类加载。
+4、如果没有加载过，判断parent，父类加载器是否为null，如果不为null委派给父类加载。
     c = parent.loadClass(name, false);
     并且resolve参数为false，所以不使用父类的resolveClass(Class<?> c)方法
 5、如果父类加载器parent为null，则调用findBootstrapClassOrNull(name)返回虚拟机的类加载器
@@ -703,32 +703,134 @@ Error 最重要的意义，在于 JVM 对它的约定。Error表示非常重要�
 7、如果还没有加载到，则报错
 ```
 
-[双亲委托](https://zhuanlan.zhihu.com/p/142141937)
+[双亲委派](https://zhuanlan.zhihu.com/p/142141937)
 ```  
-为什么要使用双亲委托：
-    如果不使用双亲委托，那么就可以写一个恶意的基础类，如java.lang.String类自己实现类加载器不使用并加载，将会使所有使用到该类到地方使用这个类。
-    如果使用双亲委托，则会先从父类加载，java.lang.String永远是由根装载器来装载。
+为什么要使用双亲委派：
+    如果不使用双亲委派，那么就可以写一个恶意的基础类，如java.lang.String类自己实现类加载器不使用并加载，将会使所有使用到该类到地方使用这个类。
+    如果使用双亲委派，则会先从父类加载，java.lang.String永远是由根装载器来装载。
+实现原理：
+    loadClass方法的类加载过程中，第4、5、6步就是可以先委派给父类加载。
+    ClassLoader.getSystemClassLoader()方法中调用了initSystemClassLoader()。
+    初始化了Launcher类的内部类ExtClassLoader、AppClassLoader
+    而这两个初始化最终调用了ClassLoader类的ClassLoader(Void unused, ClassLoader parent)构造函数。
+    ExtClassLoader的parent=null，AppClassLoader的parent=ExtClassLoader
+    所以加载过程为：findBootstrapClassOrNull(name)返回虚拟机的类加载器BootstrapClassLoad > ExtClassLoader > AppClassLoader
+主意：类加载器不是通过继承实现委派机制，而是通过组合！
 ```
-21) Compiler 4
-22) System 4
-23) Package 4
-24) Void 4
 
-2、java.util
+[破坏双亲委派](https://blog.csdn.net/yangcheng33/article/details/52631940)
+``` 
+为什么要破坏双亲委派：
+    父类加载器需要委派子类加载器去加载class文件，例如mysql驱动的加载
+```
+[21Compiler](https://blog.csdn.net/m0_37609579/article/details/103706060)
 
-1) AbstractList 1
-2) AbstractMap 1
-3) AbstractSet 1
-4) ArrayList 1
-5) LinkedList 1
-6) HashMap 1
+[22、System](https://blog.csdn.net/u014209205/article/details/81320854)
+
+[23、Package](https://juejin.im/post/6844904115705921543)
+
+[24、Void](https://juejin.im/post/6887464312093442062)
+
+`二、 java.util`
+
+[1、AbstractList](https://www.jianshu.com/p/66b3d4c4bf1d)
+
+[2、AbstractMap](https://blog.csdn.net/Airsaid/article/details/51178444)
+
+[3、AbstractSet](https://juejin.im/post/6877199197210247175)
+
+[4、ArrayList](https://blog.csdn.net/zxt0601/article/details/77281231)
+
+```  
+DEFAULT_CAPACITY = 10;默认长度10
+初始化是DEFAULTCAPACITY_EMPTY_ELEMENTDATA = {};空的数组，节省空间。
+当往里面添加数据时，通过判断是否为默认空数组，如果是初始化为默认长度10当数组。
+```
+
+size问题：
+```
+int size;
+    此字段标示当前使用了的数组范围
+    调用add(E)方法时，size++
+    调用remove(E)方法时，size--
+    set(int index, E element),方法中的index需要在size范围内。
+例如：
+    ArrayList<Integer> arrayList = new ArrayList(10);
+    System.out.println(arrayList.size());
+    arrayList.set(5,1);
+    虽然arrayList中的数组初始化长度为10，但是size为0。所以set(5,1)会报越界异常
+```
+扩容：
+``` 
+    int newCapacity = oldCapacity + (oldCapacity >> 1);
+    增加原来的1/2
+```
+[面试](https://juejin.im/post/6844904040359264270)
+
+[5、LinkedList](https://blog.csdn.net/zxt0601/article/details/77341098)
+``` 
+LinkedList 是线程不安全的，允许元素为null的双向链表
+它实现List<E>, Deque<E>, Cloneable, java.io.Serializable接口
+没有实现RandomAccess所以其以下标，随机访问元素速度较慢。
+缺点就是需要随机访问元素时，时间效率很低，虽然底层在根据下标查询Node的时候，会根据index判断目标Node在前半段还是后半段，然后决定是顺序还是逆序查询，以提升时间效率
+```
+
+[6、HashMap](https://mp.weixin.qq.com/s/0Gf2DzuzgEx0i3mHVvhKNQ)
+
+``` 
+DEFAULT_INITIAL_CAPACITY = 1 << 4;  默认长度16
+MAXIMUM_CAPACITY = 1 << 30;         最大长度2的30次方
+DEFAULT_LOAD_FACTOR = 0.75f;        负载系数 0.75
+newCap = oldCap << 1                扩容是原来容量的2倍
+可以存储null键和null值 null的hash值为0
+```
+[hashMap链表成环](https://juejin.im/post/6844903942720061447)
+``` 
+在transfer方法中有这么一段代码：
+while(e != null){
+    Entry next = e.next;
+    e.next = newTable[i];
+    newTable[i] = e;
+    e = next;
+}
+目的是为了让旧数组中的链表迁移到新数组的i位置
+
+oldTable
+    a->b->null
+newTable
+    b->a->null
+在多线程情况下，如果有一个线程处于oldTable时期，另一个处于newTable，那么oldTable时期的情况已经是：
+    a->b 并且 b->a。这个时候就会出现环链表
+
+JDK8 中解决方案:
+    并没有一个一个迁移，是将所有的oldTable中的值经过hash重新散列，会分布在newTable中的两个位置
+    因为每次扩容是原来的2倍，所以最多产生两个值
+    将两个位置的链表分别用loHead和hiHead标示
+    等通过do while循环遍历完所有的节点之后
+    将loHead和hiHead挂到新的两个位置就可以了
+    因为是在同一方法中进行的，loHead和hiHead都为局部变量，所以不会有线程问题，也就不会出现之前版本的环链表
+```
+红黑树：
+```
+Hashmap中的链表大小超过八个时会自动转化为红黑树
+1.节点是红色或黑色。
+2.根节点是黑色。
+3.每个叶子节点都是黑色的空节点（NIL节点）。
+4 每个红色节点的两个子节点都是黑色。(从每个叶子到根的所有路径上不能有两个连续的红色节点)
+5.从任一节点到其每个叶子的所有路径都包含相同数目的黑色节点。
+```
 7) Hashtable 1
+
+``` 
+ConcurrentHashmap和Hashtable都是支持并发的，这样会有一个问题，当你通过get(k)获取对应的value时，如果获取到的是null时，你无法判断，它是put（k,v）的时候value为null，还是这个key从来没有做过映射。HashMap是非并发的，可以通过contains(key)来做这个判断。而支持并发的Map在调用m.contains（key）和m.get(key),m可能已经不同了。
+
+```
 8) HashSet 1
 9) LinkedHashMap 1
 10) LinkedHashSet 1
 11) TreeMap 1
 12) TreeSet 1
-13) Vector 2
+[13、Vector](https://mp.weixin.qq.com/s/0cMrE87iUxLBw_qTBMYMgA)
 14) Queue 2
 15) Stack 2
 16) SortedMap 2
@@ -748,8 +850,85 @@ Error 最重要的意义，在于 JVM 对它的约定。Error表示非常重要�
 
 3、java.util.concurrent
 
-1) ConcurrentHashMap 1
-2) Executor 2
+[1、ConcurrentHashMap]()
+
+多线程的场景:
+``` 
+线程不安全的问题：
+    1、造成元素的覆盖
+    2、jdk1.7hashmap会产生环链表
+使用Collections.synchronizedMap(Map)创建线程安全的map集合；
+    SynchronizedMap内部维护了一个普通对象Map，还有排斥锁mutex
+Hashtable
+ConcurrentHashMap
+```
+为什么key和value不能为null
+``` 
+因为需要支持并发，所以不能通过contains（key）判断null是存入的值还是本来就没有 
+    ConcurrentHashmap和Hashtable都是支持并发的，
+    这样会有一个问题，当你通过get(k)获取对应的value时，
+    如果获取到的是null时，你无法判断，它是put（k,v）的时候value为null，
+    还是这个key从来没有做过映射。HashMap是非并发的，可以通过contains(key)来做这个判断。
+    而支持并发的Map在调用m.contains（key）和m.get(key),m可能已经不同了。
+
+```
+快速失败（fail—fast）
+``` 
+迭代器在遍历时直接访问集合中的内容，并且在遍历过程中使用一个 modCount 变量。
+集合在被遍历期间如果内容发生变化，就会改变modCount的值。
+
+安全失败（fail—safe）
+    大家也可以了解下，java.util.concurrent包下的容器都是安全失败，可以在多线程下并发使用，并发修改。
+```
+put
+``` 
+根据 key 计算出 hashcode
+判断是否需要进行初始化。
+即为当前 key 定位出的 Node，如果为空表示当前位置可以写入数据，利用 CAS 尝试写入，失败则自旋保证成功。
+如果当前位置的 hashcode == MOVED == -1,则需要进行扩容。
+如果都不满足，则利用 synchronized 锁写入数据。
+如果数量大于 TREEIFY_THRESHOLD 则要转换为红黑树。
+```
+CAS
+``` 
+CAS 是乐观锁的一种实现方式，是一种轻量级锁
+线程在读取数据时不进行加锁，在准备写回数据时，比较原值是否修改，若未被其他线程修改则写回，若已被修改，则重新执行读取流程。
+
+ABA问题
+    用版本号去保证就好了
+```
+get
+``` 
+根据计算出来的 hashcode 寻址，如果就在桶上那么直接返回值。
+如果是红黑树那就按照树的方式获取值。
+就不满足那就按照链表的方式遍历获取值。
+```
+[2、Executor](https://blog.csdn.net/linxdcn/article/details/72828362)
+
+newCachedThreadPool
+``` 
+初始化一个可以缓存线程的线程池，
+在没有任务执行时，当线程的空闲时间超过keepAliveTime，会自动释放线程资源
+当提交新任务时，如果没有空闲线程，则创建新线程执行任务，会导致一定的系统开销。
+```
+newFixedThreadPool
+``` 
+创建一个固定大小的线程池
+```
+newSingleThreadExecutor
+``` 
+初始化的线程池中只有一个线程
+如果该线程异常结束，会重新创建一个新的线程继续执行任务
+唯一的线程可以保证所提交任务的顺序执行
+```
+newScheduledThreadPool
+``` 
+初始化的线程池可以在指定的时间内周期性的执行所提交的任务
+```
+newWorkStealingPool
+``` 
+创建一个 work-stealing 线程池，使用目前机器上可用的处理器作为它的并行级别，并可以使用多个队列来减少竞争。
+```
 3) AbstractExecutorService 2
 4) ExecutorService 2
 5) ThreadPoolExecutor 2
@@ -845,3 +1024,7 @@ Error 最重要的意义，在于 JVM 对它的约定。Error表示非常重要�
 [有趣的NaN类型](https://www.cnblogs.com/big-xuyue/p/4106130.html)
 
 [关于Java中的WeakReference](https://www.jianshu.com/p/964fbc30151a)
+
+[Mysql中，21个写SQL的好习惯，你值得拥有呀](https://juejin.im/post/6889550040558206983)
+
+[volatile与synchronized的区别](https://mp.weixin.qq.com/s?__biz=MzAwNDA2OTM1Ng==&mid=2453142004&idx=1&sn=81ccddb6c8b37114c022c4ad50368ecf&scene=21#wechat_redirect)

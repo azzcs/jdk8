@@ -12,11 +12,7 @@ public class MyClassLoader extends ExtensionClassLoader{
 
     @Override
     protected Class<?> findClass(String name) throws ClassNotFoundException {
-        Class<?> clazz = super.findClass(name);
-        if(clazz == null){
-            clazz = localFindClass(name);
-        }
-        return clazz;
+        return localFindClass(name);
     }
 
     private Class<?> localFindClass(String name) throws ClassNotFoundException {

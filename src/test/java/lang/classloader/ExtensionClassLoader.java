@@ -12,11 +12,7 @@ public class ExtensionClassLoader extends BootstrapClassLoader{
 
     @Override
     protected Class<?> findClass(String name) throws ClassNotFoundException {
-        Class<?> aClass = super.findClass(name);
-        if(aClass == null) {
-            aClass = localFindClass(name);
-        }
-        return aClass;
+        return localFindClass(name);
     }
 
     private Class<?> localFindClass(String name) {
