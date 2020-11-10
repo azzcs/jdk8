@@ -819,16 +819,33 @@ Hashmap中的链表大小超过八个时会自动转化为红黑树
 4 每个红色节点的两个子节点都是黑色。(从每个叶子到根的所有路径上不能有两个连续的红色节点)
 5.从任一节点到其每个叶子的所有路径都包含相同数目的黑色节点。
 ```
-7) Hashtable 1
+[7、Hashtable](https://www.jianshu.com/p/5c6e30129c46)
 
+不能存储null
 ``` 
 ConcurrentHashmap和Hashtable都是支持并发的，这样会有一个问题，当你通过get(k)获取对应的value时，如果获取到的是null时，你无法判断，它是put（k,v）的时候value为null，还是这个key从来没有做过映射。HashMap是非并发的，可以通过contains(key)来做这个判断。而支持并发的Map在调用m.contains（key）和m.get(key),m可能已经不同了。
 
 ```
-8) HashSet 1
-9) LinkedHashMap 1
-10) LinkedHashSet 1
-11) TreeMap 1
+
+``` 
+默认长度为11，负载因子0.75
+
+```
+[8) HashSet](https://blog.csdn.net/fighterandknight/article/details/66585997)
+``` 
+非线程安全
+允许null值
+添加值得时候会先获取对象的hashCode方法，如果hashCode 方法返回的值一致，则再调用equals方法判断是否一致，如果不一致才add元素。
+```
+[9、LinkedHashMap](https://juejin.im/post/6844903590159450120)
+``` 
+LinkedHashMap 拥有与 HashMap 相同的底层哈希表结构，即数组 + 单链表 + 红黑树，也拥有相同的扩容机制。
+LinkedHashMap 相比 HashMap 的拉链式存储结构，内部额外通过 Entry 维护了一个双向链表。
+HashMap 元素的遍历顺序不一定与元素的插入顺序相同，而 LinkedHashMap 则通过遍历双向链表来获取元素，所以遍历顺序在一定条件下等于插入顺序。
+LinkedHashMap 可以通过构造参数 accessOrder 来指定双向链表是否在元素被访问后改变其在双向链表中的位置。
+```
+[10、LinkedHashSet](https://www.jianshu.com/p/21b92c8ac1b1)
+[11、TreeMap](https://www.jianshu.com/p/fc5e16b5c674)
 12) TreeSet 1
 [13、Vector](https://mp.weixin.qq.com/s/0cMrE87iUxLBw_qTBMYMgA)
 14) Queue 2
@@ -849,8 +866,9 @@ ConcurrentHashmap和Hashtable都是支持并发的，这样会有一个问题，
 29) WeakHashMap 4
 
 3、java.util.concurrent
+[透彻理解Java并发编程系列](https://segmentfault.com/a/1190000015558984)
 
-[1、ConcurrentHashMap]()
+[1、ConcurrentHashMap](https://juejin.im/entry/6844903508546682887)
 
 多线程的场景:
 ``` 
